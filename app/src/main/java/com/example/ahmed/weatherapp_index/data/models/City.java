@@ -5,17 +5,28 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class City {
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
+
+
+
+public class City extends RealmObject {
 
     @SerializedName("id")
     @Expose
+    @PrimaryKey
     private int id;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("coord")
     @Expose
+    @Ignore
     private Coord coord;
+
     @SerializedName("country")
     @Expose
     private String country;

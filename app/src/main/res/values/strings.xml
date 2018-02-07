@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">WeatherApp-index</string>
+    <string name="app_name">Weather App</string>
+    <string name="search_title">search cities</string>
 </resources>
