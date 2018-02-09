@@ -5,11 +5,14 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import android.text.format.DateFormat;
+import java.util.Date;
+
 public class List {
 
     @SerializedName("dt")
     @Expose
-    private int dt;
+    private Long dt;
     @SerializedName("main")
     @Expose
     private Main main;
@@ -32,6 +35,8 @@ public class List {
     @Expose
     private String dt_txt;
 
+
+
     /**
      * No args constructor for use in serialization
      * 
@@ -40,17 +45,16 @@ public class List {
     }
 
     /**
-     * 
-     * @param clouds
-     * @param dt
-     * @param wind
-     * @param sys
-     * @param snow
-     * @param weather
-     * @param dt_txt
+     *  @param dt
      * @param main
+     * @param weather
+     * @param clouds
+     * @param wind
+     * @param snow
+     * @param sys
+     * @param dt_txt
      */
-    public List(int dt, Main main, java.util.List<Weather> weather, Clouds clouds, Wind wind, Snow snow, Sys sys, String dt_txt) {
+    public List(Long dt, Main main, java.util.List<Weather> weather, Clouds clouds, Wind wind, Snow snow, Sys sys, String dt_txt) {
         super();
         this.dt = dt;
         this.main = main;
@@ -62,11 +66,11 @@ public class List {
         this.dt_txt = dt_txt;
     }
 
-    public int getDt() {
-        return dt;
+    public Long getDt() {
+        return dt*1000 ; //return time in mills
     }
 
-    public void setDt(int dt) {
+    public void setDt(Long dt) {
         this.dt = dt;
     }
 
@@ -131,4 +135,8 @@ public class List {
         return new ToStringBuilder(this).append("dt", dt).append("main", main).append("weather", weather).append("clouds", clouds).append("wind", wind).append("snow", snow).append("sys", sys).append("dt_txt", dt_txt).toString();
     }
 
+    public String getDayName() {
+
+        return (String) DateFormat.format("EEEE", new Date(getDt()));
+    }
 }
