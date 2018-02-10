@@ -12,7 +12,7 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
 public class CitiesPresenter {
     private static  CitiesPresenter ourInstance ;
 
-    private ModelLayerImp mModelLayer;
+    private ModelLayer mModelLayer;
 
     public static CitiesPresenter getInstance(ModelLayer modelLayer) {
 
@@ -23,8 +23,9 @@ public class CitiesPresenter {
     }
 
     private CitiesPresenter(ModelLayer modelLayer) {
-        this.mModelLayer = (ModelLayerImp)modelLayer;
+        this.mModelLayer = modelLayer;
     }
+
 
     public void getCurrentCityFromGps(PlaceDetectionClient placeDetectionClient, CitiesContract.AddCityCallback callback) {
 
@@ -44,7 +45,5 @@ public class CitiesPresenter {
 
     }
 
-    public void getDefaultCurrentCity() {
 
-    }
 }

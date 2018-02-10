@@ -76,6 +76,7 @@ public class ModelLayerImp implements ModelLayer {
         });
     }
 
+    @Override
     public void getCurrentLocation(PlaceDetectionClient placeDetectionClient, final CitiesContract.AddCityCallback callback) {
 
         @SuppressLint("MissingPermission") Task<PlaceLikelihoodBufferResponse> placeResult = placeDetectionClient.getCurrentPlace(null);
@@ -95,17 +96,20 @@ public class ModelLayerImp implements ModelLayer {
 
     }
 
+    @Override
     public void addCity(UserCity city, CitiesContract.AddCityCallback callback) {
         localDataSource.addCity(city, callback);
     }
 
 
+    @Override
     public void getAllCities(CitiesContract.CitiesResultCallback callback) {
         String id = sharedPreferenceManager.getCurrentCityIdKey();
         localDataSource.getAllCities(id, callback);
     }
 
 
+    @Override
     public void deleteCity(UserCity city) {
         localDataSource.deleteCity(city);
     }
