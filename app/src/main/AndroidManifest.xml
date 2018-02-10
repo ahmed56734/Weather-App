@@ -29,7 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.cityforecast.CityForecastActivity">
+        <activity android:name=".ui.cityforecast.CityForecastActivity"
+            android:launchMode="singleTop">
 
         </activity>
     </application>

@@ -3,6 +3,7 @@ package com.example.ahmed.weatherapp_index.ui.cityforecast;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +40,10 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
     @BindView(R.id.error_message)
     TextView mErrorMessageTextView;
 
+    @BindView(R.id.swiperefresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+
     private ProgressBar mActionBarProgressBar;
 
 
@@ -70,10 +75,14 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
 
         showProgressBar();
 
-
         //parse intent
         Bundle bundle = getIntent().getExtras();
         mPresenter.parseIntentBundle(bundle);
+
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshListener());
+
+
 
 
     }
@@ -106,9 +115,11 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
 
         hideProgressBar();
         hideActionBarProgressBar();
+        hideRefreshing();
         mForecastAdapter.updateData(cityName, forecastList);
 
     }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -116,6 +127,11 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
 
         mPresenter.parseIntentBundle(intent.getExtras());
         updateUi();
+    }
+
+
+    private void hideRefreshing() {
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     public void showActionBarProgressBar() {
@@ -145,6 +161,21 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
 
     void hideErrorMessage() {
         mErrorMessageTextView.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    class SwipeRefreshListener implements SwipeRefreshLayout.OnRefreshListener{
+
+        @Override
+        public void onRefresh() {
+            updateUi();
+        }
     }
 
 

@@ -113,8 +113,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView pressureTextView;
         @BindView(R.id.humidity)
         TextView humidityTextView;
-        @BindView(R.id.last_update)
-        TextView lastUpdateTextView;
+
 
         private Context context;
 
