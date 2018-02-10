@@ -21,6 +21,7 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:contentInsetStart="72dp"
             app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/ic_action_back"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:titleTextColor="@android:color/white" />
 

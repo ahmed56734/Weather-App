@@ -32,7 +32,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.cityforecast.CityForecastActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.cities.MainActivity">
 
         </activity>
     </application>
