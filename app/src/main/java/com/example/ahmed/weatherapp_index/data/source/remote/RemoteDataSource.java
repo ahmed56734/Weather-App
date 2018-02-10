@@ -9,16 +9,18 @@ import com.example.ahmed.weatherapp_index.data.source.remote.api.response.Foreca
 public interface RemoteDataSource {
 
 
-    interface GetCurrentCityForecastCallback {
+    interface ApiForecastResponse {
 
         void onForecastLoaded(ForecastResponse response);
 
         void onDataNotAvailable();
     }
 
-    void getForecastByCityId(int cityId);
 
-    void getCurrentCityForecastByCoordinates(double latitude, double longitude, GetCurrentCityForecastCallback callback);
+    void getCityForecastByCoordinates(double latitude, double longitude, final ApiForecastResponse callback);
+
+
+
 
 
 }

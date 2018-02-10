@@ -5,7 +5,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Main {
+
+public class Main  {
 
     @SerializedName("temp")
     @Expose
@@ -28,9 +29,7 @@ public class Main {
     @SerializedName("humidity")
     @Expose
     private int humidity;
-    @SerializedName("temp_kf")
-    @Expose
-    private int temp_kf;
+
 
     /**
      * No args constructor for use in serialization
@@ -40,8 +39,7 @@ public class Main {
     }
 
     /**
-     * 
-     * @param temp_kf
+     *
      * @param humidity
      * @param pressure
      * @param temp_max
@@ -50,7 +48,7 @@ public class Main {
      * @param temp
      * @param grnd_level
      */
-    public Main(double temp, double temp_min, double temp_max, double pressure, double sea_level, double grnd_level, int humidity, int temp_kf) {
+    public Main(double temp, double temp_min, double temp_max, double pressure, double sea_level, double grnd_level, int humidity) {
         super();
         this.temp = temp;
         this.temp_min = temp_min;
@@ -59,7 +57,6 @@ public class Main {
         this.sea_level = sea_level;
         this.grnd_level = grnd_level;
         this.humidity = humidity;
-        this.temp_kf = temp_kf;
     }
 
     public double getTemp() {
@@ -118,17 +115,10 @@ public class Main {
         this.humidity = humidity;
     }
 
-    public int getTemp_kf() {
-        return temp_kf;
-    }
-
-    public void setTemp_kf(int temp_kf) {
-        this.temp_kf = temp_kf;
-    }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("temp", temp).append("temp_min", temp_min).append("temp_max", temp_max).append("pressure", pressure).append("sea_level", sea_level).append("grnd_level", grnd_level).append("humidity", humidity).append("temp_kf", temp_kf).toString();
+        return new ToStringBuilder(this).append("temp", temp).append("temp_min", temp_min).append("temp_max", temp_max).append("pressure", pressure).append("sea_level", sea_level).append("grnd_level", grnd_level).append("humidity", humidity).toString();
     }
 
 }

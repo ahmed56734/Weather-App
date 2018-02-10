@@ -2,7 +2,7 @@
 package com.example.ahmed.weatherapp_index.data.source.remote.api.response;
 
 import com.example.ahmed.weatherapp_index.data.models.City;
-import com.example.ahmed.weatherapp_index.data.models.List;
+import com.example.ahmed.weatherapp_index.data.models.Forecast;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -21,7 +21,7 @@ public class ForecastResponse {
     private int cnt;
     @SerializedName("list")
     @Expose
-    private java.util.List<List> list = null;
+    private java.util.List<Forecast> forecast = null;
     @SerializedName("city")
     @Expose
     private City city;
@@ -38,15 +38,15 @@ public class ForecastResponse {
      * @param message
      * @param cnt
      * @param cod
-     * @param list
+     * @param forecast
      * @param city
      */
-    public ForecastResponse(String cod, double message, int cnt, java.util.List<List> list, City city) {
+    public ForecastResponse(String cod, double message, int cnt, java.util.List<Forecast> forecast, City city) {
         super();
         this.cod = cod;
         this.message = message;
         this.cnt = cnt;
-        this.list = list;
+        this.forecast = forecast;
         this.city = city;
     }
 
@@ -74,12 +74,12 @@ public class ForecastResponse {
         this.cnt = cnt;
     }
 
-    public java.util.List<List> getList() {
-        return list;
+    public java.util.List<Forecast> getForecast() {
+        return forecast;
     }
 
-    public void setList(java.util.List<List> list) {
-        this.list = list;
+    public void setForecast(java.util.List<Forecast> forecast) {
+        this.forecast = forecast;
     }
 
     public City getCity() {
@@ -92,7 +92,7 @@ public class ForecastResponse {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("cod", cod).append("message", message).append("cnt", cnt).append("list", list).append("city", city).toString();
+        return new ToStringBuilder(this).append("cod", cod).append("message", message).append("cnt", cnt).append("list", forecast).append("city", city).toString();
     }
 
 }

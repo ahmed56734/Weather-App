@@ -14,10 +14,10 @@ import retrofit2.http.Query;
 
 public interface WeatherApiService {
 
-    @GET("forecast")
+    @GET("forecast?units=metric")
     Call<ForecastResponse> getForecast(@Query("id") int cityId);
 
-    @GET("forecast")
+    @GET("forecast?units=metric")
     Call<ForecastResponse> getForecast(@Query("lat") double lat, @Query("lon") double lon);
 
 

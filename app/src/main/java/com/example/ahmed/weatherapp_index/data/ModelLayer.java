@@ -1,7 +1,9 @@
 package com.example.ahmed.weatherapp_index.data;
 
+import com.example.ahmed.weatherapp_index.data.models.Forecast;
 import com.example.ahmed.weatherapp_index.data.models.Weather;
 import com.example.ahmed.weatherapp_index.data.source.remote.RemoteDataSource;
+import com.example.ahmed.weatherapp_index.data.source.remote.api.response.ForecastResponse;
 
 
 import java.util.List;
@@ -15,13 +17,13 @@ public interface ModelLayer {
 
     interface GetCityForecastCallback {
 
-        void onForecastLoaded(List<Weather> response);
+        void onForecastLoaded(List<Forecast> forecastList);
 
         void onDataNotAvailable();
+
     }
 
 
-    void getCurrentCityForecast(double latitude, double longitude,
-                                RemoteDataSource.GetCurrentCityForecastCallback callback);
+
 
 }

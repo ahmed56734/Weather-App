@@ -29,4 +29,5 @@
         <xliff:g id="humidity">%1.0f</xliff:g> %%
     </string>
     <string name="forecast_error_message">un able to load forecast, swipe to refresh</string>
+    <string name="offline_message">no internet connection</string>
 </resources>
