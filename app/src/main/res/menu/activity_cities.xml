@@ -2,9 +2,18 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/search_action"
+    <item android:id="@+id/search_cities"
         android:title="@string/search_title"
         android:icon="@drawable/ic_search"
         app:showAsAction="collapseActionView|ifRoom"/>
+
+
+    <item android:id="@+id/update_location"
+        android:title="@string/update_location"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_update_location"/>
+
+
+
 
 </menu>

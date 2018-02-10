@@ -2,6 +2,8 @@ package com.example.ahmed.weatherapp_index.ui.cityforecast;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,9 @@ import butterknife.ButterKnife;
  * Created by ahmed on 2/9/18.
  */
 
-public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder> {
+public class ForecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final String TAG = "ForecastAdapter";
 
     private String cityName;
     private List<Forecast> forecastList;
@@ -37,10 +41,13 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     }
 
     public void updateData(String cityName, List<Forecast> forecast) {
-        this.cityName = cityName;
 
-        this.forecastList.clear();
-        this.forecastList.addAll(forecast);
+        Log.d(TAG, "updateData");
+
+        this.cityName = cityName;
+//        this.forecastList.clear();
+//        this.forecastList.addAll(forecast);
+        this.forecastList = forecast;
 
         notifyDataSetChanged();
     }
@@ -48,37 +55,99 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     @Override
     public int getItemViewType(int position) {
 
-        if (position == TODAY_FORECAST_VIEW_TYPE)
+        if (position == 0)
             return TODAY_FORECAST_VIEW_TYPE;
 
         return super.getItemViewType(position);
     }
 
     @Override
-    public ForecastViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView;
 
-        if (viewType == TODAY_FORECAST_VIEW_TYPE)
+        if (viewType == TODAY_FORECAST_VIEW_TYPE) {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_today_weather, parent, false);
+            return new TodayWeatherViewHolder(itemView);
+        }
 
-        else
+        else {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_weather, parent, false);
+            return new ForecastViewHolder(itemView);
+        }
 
-        return new ForecastViewHolder(itemView);
+
     }
 
     @Override
-    public void onBindViewHolder(ForecastViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
         Forecast forecast = forecastList.get(position);
-        holder.bindData(forecast);
+
+        if (getItemViewType(position) == TODAY_FORECAST_VIEW_TYPE) {
+            ((TodayWeatherViewHolder) holder).bindData(forecast);
+        }
+        else
+            ((ForecastViewHolder) holder).bindData(forecast);
 
     }
 
     @Override
     public int getItemCount() {
         return forecastList.size();
+    }
+
+
+    class TodayWeatherViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.weather_icon)
+        ImageView weatherIconImageView;
+        @BindView(R.id.date)
+        TextView dateTextView;
+        @BindView(R.id.weather_description)
+        TextView weatherDescriptionTextView;
+        @BindView(R.id.city_name)
+        TextView cityNameTextView;
+        @BindView(R.id.temperature)
+        TextView temperatureTextView;
+        @BindView(R.id.wind)
+        TextView windTextView;
+        @BindView(R.id.pressure)
+        TextView pressureTextView;
+        @BindView(R.id.humidity)
+        TextView humidityTextView;
+
+        private Context context;
+
+        public TodayWeatherViewHolder(View itemView) {
+            super(itemView);
+
+            context = itemView.getContext();
+            ButterKnife.bind(this, itemView);
+        }
+
+        void bindData(Forecast forecast) {
+
+            Weather weather = forecast.getWeather().get(0);
+            String iconUrl = Utils.getWeatherIconUrl(weather.getIcon());
+
+            Picasso.with(context).load(iconUrl).into(weatherIconImageView);
+            dateTextView.setText(forecast.getDate());
+            weatherDescriptionTextView.setText(weather.getDescription());
+            cityNameTextView.setText(cityName);
+
+            temperatureTextView
+                    .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp()));
+
+            windTextView
+                    .setText(context.getString(R.string.format_wind_kmh, forecast.getWind().getSpeed()));
+
+//            humidityTextView
+//                    .setText(context.getString(R.string.format_humidity, forecast.getMain().getHumidity()));
+
+//            pressureTextView
+//                    .setText(context.getString(R.string.format_pressure, forecast.getMain().getPressure()));
+        }
     }
 
     class ForecastViewHolder extends RecyclerView.ViewHolder {
@@ -93,16 +162,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         TextView lowTemperatureTextView;
         @BindView(R.id.high_temperature)
         TextView highTemperatureTextView;
-        @BindView(R.id.city_name)
-        TextView cityNameTextView;
-        @BindView(R.id.temperature)
-        TextView temperatureTextView;
-        @BindView(R.id.wind)
-        TextView windTextView;
-        @BindView(R.id.pressure)
-        TextView pressureTextView;
-        @BindView(R.id.humidity)
-        TextView humidityTextView;
 
         private Context context;
 
@@ -119,35 +178,15 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             Weather weather = forecast.getWeather().get(0);
             String iconUrl = Utils.getWeatherIconUrl(weather.getIcon());
 
-
             Picasso.with(context).load(iconUrl).into(weatherIconImageView);
             dateTextView.setText(forecast.getDate());
             weatherDescriptionTextView.setText(weather.getDescription());
 
-            if (getItemViewType() == TODAY_FORECAST_VIEW_TYPE) {
-                cityNameTextView.setText(cityName);
+            highTemperatureTextView
+                    .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp_max()));
 
-                temperatureTextView
-                        .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp()));
-
-                windTextView
-                        .setText(context.getString(R.string.format_wind_kmh, forecast.getWind().getSpeed()));
-
-                humidityTextView
-                        .setText(context.getString(R.string.format_humidity, forecast.getMain().getHumidity()));
-
-                pressureTextView
-                        .setText(context.getString(R.string.format_pressure, forecast.getMain().getPressure()));
-            }
-
-            else{
-                highTemperatureTextView
-                        .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp_max()));
-
-                lowTemperatureTextView
-                        .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp_min()));
-            }
-
+            lowTemperatureTextView
+                    .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp_min()));
 
         }
     }
