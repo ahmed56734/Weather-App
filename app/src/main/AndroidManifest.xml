@@ -19,7 +19,7 @@
         <!--TODO add your api key here-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAbXSOYyee0tLZ4GiRmWJlNlNBIYj0dUjI" />
+            android:value="your api key" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
