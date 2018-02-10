@@ -136,4 +136,8 @@ public class Forecast {
     public String getDate(){
         return (String) DateFormat.format("E,MMM d", new Date(getDt()));
     }
+
+    public String getLastUpdate(){
+        return (String) DateFormat.format("hh:mm aa", new Date(getDt()));
+    }
 }

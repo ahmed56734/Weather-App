@@ -9,25 +9,25 @@
     </string>
 
     <string name="wind_label">Wind</string>
-    <!-- Wind in kph -->
+
     <string name="format_wind_kmh">
-        <item>wind_label</item>
         <xliff:g id="speed">%1$1.0f</xliff:g> km/h
     </string>
 
 
 
     <string name="pressure_label">Pressure</string>
-    <!-- Pressure format -->
+
     <string name="format_pressure">
-        <xliff:g id="pressure">%d</xliff:g> hPa
+        <xliff:g id="pressure">%1$1.0f</xliff:g> hPa
     </string>
 
     <string name="humidity_label">Humidity</string>
-    <!-- Humidity format -->
+
     <string name="format_humidity">
-        <xliff:g id="humidity">%1.0f</xliff:g> %%
+        <xliff:g id="humidity">%d</xliff:g> %%
     </string>
     <string name="forecast_error_message">un able to load forecast, swipe to refresh</string>
     <string name="offline_message">no internet connection</string>
+    <string name="last_update_label">last updated</string>
 </resources>

@@ -69,9 +69,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (viewType == TODAY_FORECAST_VIEW_TYPE) {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_today_weather, parent, false);
             return new TodayWeatherViewHolder(itemView);
-        }
-
-        else {
+        } else {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_weather, parent, false);
             return new ForecastViewHolder(itemView);
         }
@@ -86,8 +84,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (getItemViewType(position) == TODAY_FORECAST_VIEW_TYPE) {
             ((TodayWeatherViewHolder) holder).bindData(forecast);
-        }
-        else
+        } else
             ((ForecastViewHolder) holder).bindData(forecast);
 
     }
@@ -116,6 +113,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView pressureTextView;
         @BindView(R.id.humidity)
         TextView humidityTextView;
+        @BindView(R.id.last_update)
+        TextView lastUpdateTextView;
 
         private Context context;
 
@@ -140,13 +139,24 @@ public class ForecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp()));
 
             windTextView
-                    .setText(context.getString(R.string.format_wind_kmh, forecast.getWind().getSpeed()));
+                    .setText(String.format("%s %s",
+                            context.getString(R.string.wind_label),
+                            context.getString(R.string.format_wind_kmh, forecast.getWind().getSpeed())));
 
-//            humidityTextView
-//                    .setText(context.getString(R.string.format_humidity, forecast.getMain().getHumidity()));
+            humidityTextView
+                    .setText(String.format("%s %s"
+                            , context.getString(R.string.humidity_label)
+                            , context.getString(R.string.format_humidity, forecast.getMain().getHumidity())));
 
-//            pressureTextView
-//                    .setText(context.getString(R.string.format_pressure, forecast.getMain().getPressure()));
+            pressureTextView
+                    .setText(String.format("%s %s"
+                            , context.getString(R.string.pressure_label)
+                            , context.getString(R.string.format_pressure, forecast.getMain().getPressure())));
+
+//            lastUpdateTextView
+//                    .setText(String.format("%s%s"
+//                            , context.getString(R.string.last_update_label)
+//                            , forecast.getLastUpdate()));
         }
     }
 

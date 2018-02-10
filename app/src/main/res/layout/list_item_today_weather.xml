@@ -95,7 +95,7 @@
                 android:layout_marginTop="8dp"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
-                tools:text="Wind: 0 m/s" />
+                tools:text="Wind: 0 km/h" />
 
             <TextView
                 android:id="@+id/pressure"
@@ -114,16 +114,17 @@
                 tools:text="Humidity: 0 %" />
 
 
-            <TextView
-                android:id="@+id/lastUpdate"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom|end"
-                android:gravity="bottom|end"
-                android:paddingEnd="16dp"
-                android:textAlignment="viewEnd"
-                android:textSize="16sp"
-                android:text="8:45 pm" />
+            <!--<TextView-->
+                <!--android:id="@+id/last_update"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_gravity="bottom|end"-->
+                <!--android:gravity="bottom|end"-->
+                <!--android:paddingEnd="16dp"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textAlignment="viewEnd"-->
+                <!--android:textSize="16sp"-->
+                <!--tools:text="8:45 pm" />-->
         </LinearLayout>
 
     </LinearLayout>
