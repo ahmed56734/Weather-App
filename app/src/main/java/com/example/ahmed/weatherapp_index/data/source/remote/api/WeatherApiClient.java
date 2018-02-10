@@ -42,6 +42,7 @@ public class WeatherApiClient {
                             Request original = chain.request();
                             HttpUrl originalHttpUrl = original.url();
 
+                            //TODO add weather api key
                             HttpUrl url = originalHttpUrl.newBuilder()
                                     .addQueryParameter("APPID", "8f19d38f8fa2a04e30e2e21d60878384")
                                     .build();
