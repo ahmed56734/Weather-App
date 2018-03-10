@@ -1,5 +1,9 @@
 package com.example.ahmed.weatherapp_index.ui.cityforecast;
 
+import android.os.Bundle;
+
+import com.example.ahmed.weatherapp_index.BasePresenter;
+import com.example.ahmed.weatherapp_index.BaseView;
 import com.example.ahmed.weatherapp_index.data.models.Forecast;
 
 import java.util.List;
@@ -11,18 +15,22 @@ import java.util.List;
 public interface CityForecastContract {
 
 
-    interface UpdateForecastCallback{
+    interface UpdateForecastCallback {
 
         void onForecastLoaded(String cityName, List<Forecast> forecastList);
+
         void onDataNotAvailable();
 
     }
 
-    interface Presenter {
+    interface Presenter extends BasePresenter {
 
+        void getForecast(UpdateForecastCallback callback);
+
+        void parseIntentBundle(Bundle extras);
     }
 
-    interface View {
+    interface View extends BaseView {
         void updateForecast(String cityName, List<Forecast> forecastList);
 
     }

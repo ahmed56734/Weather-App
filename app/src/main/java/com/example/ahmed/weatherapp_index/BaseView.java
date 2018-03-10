@@ -16,7 +16,7 @@
 
 package com.example.ahmed.weatherapp_index;
 
-public interface BaseView<T> {
+public interface BaseView {
 
 
 

@@ -9,7 +9,7 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
  * Created by ahmed on 2/7/18.
  */
 
-public class CitiesPresenter {
+public class CitiesPresenter implements CitiesContract.Presenter {
     private static  CitiesPresenter ourInstance ;
 
     private ModelLayer mModelLayer;

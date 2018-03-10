@@ -39,6 +39,7 @@ public class RemoteDataSourceImp implements RemoteDataSource {
     @Override
     public void getCityForecastByCoordinates(double latitude, double longitude, final ApiForecastResponse callback) {
 
+        
 
 
         weatherApiService.getForecast(latitude, longitude).enqueue(new Callback<ForecastResponse>() {

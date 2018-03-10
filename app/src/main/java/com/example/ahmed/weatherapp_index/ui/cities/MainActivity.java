@@ -27,10 +27,7 @@ import com.example.ahmed.weatherapp_index.utils.Utils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
@@ -43,13 +40,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity implements CitiesAdapter.CityOnClickListener {
+public class MainActivity extends AppCompatActivity implements CitiesContract.View, CitiesAdapter.CityOnClickListener {
 
     private static final String TAG = "MainActivity";
 
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private static final int REQUEST_ACCESS_FINE_LOCATION_FOR_CURRENT_PLACE = 12;
-    private CitiesPresenter mPresenter;
+
 
     public static final String CITY_NAME_KEY = "cityname";
     public static final String CITY_ID_KEY = "cityid";
@@ -59,15 +56,12 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
     Toolbar toolbar;
 
     @BindView(R.id.rv_cities)
-    RecyclerView mRecyclerView;
-
-    private FusedLocationProviderClient mFusedLocationClient;
-    private GeoDataClient mGeoDataClient;
-    private PlaceDetectionClient mPlaceDetectionClient;
+    RecyclerView recyclerView;
 
 
-    private CitiesAdapter mCitiesAdapter;
-    private CitiesPresenter mCitiesPresenter;
+    private CitiesContract.Presenter presenter;
+    private PlaceDetectionClient placeDetectionClient;
+    private CitiesAdapter citiesAdapter;
 
 
     @Override
@@ -79,15 +73,9 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
 
         setSupportActionBar(toolbar);
 
-        mPresenter = CitiesPresenter.getInstance(Injection.provideModelLayer(getApplicationContext()));
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        // Construct a GeoDataClient.
-        mGeoDataClient = Places.getGeoDataClient(this, null);
+        presenter = CitiesPresenter.getInstance(Injection.provideModelLayer(getApplicationContext()));
 
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
-
-
-        mCitiesPresenter = CitiesPresenter.getInstance(Injection.provideModelLayer(getApplicationContext()));
+        placeDetectionClient = Places.getPlaceDetectionClient(this, null);
 
         initRecyclerView();
 
@@ -95,15 +83,13 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
     }
 
     private void initRecyclerView() {
-        mCitiesAdapter = new CitiesAdapter(this);
+        citiesAdapter = new CitiesAdapter(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(mCitiesAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, linearLayoutManager.getOrientation()));
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(citiesAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, linearLayoutManager.getOrientation()));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new CityItemTouchCallback());
-        itemTouchHelper.attachToRecyclerView(mRecyclerView);
-
-
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
 
@@ -140,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
 
     void updateUi() {
 
-        mPresenter.getCities(new CitiesContract.CitiesResultCallback() {
+        presenter.getCities(new CitiesContract.CitiesResultCallback() {
             @Override
             public void onDataLoaded(List<UserCity> result) {
                 updateAdapter(result);
@@ -155,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
 
     void updateAdapter(List<UserCity> result) {
 
-        mCitiesAdapter.updateData(result);
+        citiesAdapter.updateData(result);
     }
 
 
@@ -171,11 +157,12 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
             return;
         }
 
-        mPresenter.getCurrentCityFromGps(mPlaceDetectionClient, new CitiesContract.AddCityCallback() {
+        presenter.getCurrentCityFromGps(placeDetectionClient, new CitiesContract.AddCityCallback() {
             @Override
             public void onCityAdded() {
                 updateUi();
             }
+
             @Override
             public void onError() {
             }
@@ -227,12 +214,13 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 UserCity userCity = new UserCity(place.getId(), place.getAddress().toString(), place.getLatLng().latitude, place.getLatLng().longitude, null);
-                Log.i(TAG, "Place: " + place.getAddress() + " id " + place.getId() + " "+place.getLatLng().latitude +" "+place.getLatLng().longitude);
-                mPresenter.addCity(userCity, new CitiesContract.AddCityCallback() {
+                Log.i(TAG, "Place: " + place.getAddress() + " id " + place.getId() + " " + place.getLatLng().latitude + " " + place.getLatLng().longitude);
+                presenter.addCity(userCity, new CitiesContract.AddCityCallback() {
                     @Override
                     public void onCityAdded() {
                         updateUi();
                     }
+
                     @Override
                     public void onError() {
                     }
@@ -277,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
         startActivity(intent);
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -285,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
     class CityItemTouchCallback extends ItemTouchHelper.SimpleCallback {
 
 
-        public CityItemTouchCallback() {
+        CityItemTouchCallback() {
             super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         }
 
@@ -308,8 +297,8 @@ public class MainActivity extends AppCompatActivity implements CitiesAdapter.Cit
             int position = viewHolder.getAdapterPosition();
             if (position != 0) {
 
-                mCitiesPresenter.deleteCity(mCitiesAdapter.getCity(position));
-                mCitiesAdapter.deleteCity(position);
+                presenter.deleteCity(citiesAdapter.getCity(position));
+                citiesAdapter.deleteCity(position);
             }
 
         }

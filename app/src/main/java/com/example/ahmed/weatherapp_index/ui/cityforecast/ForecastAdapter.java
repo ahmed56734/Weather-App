@@ -193,6 +193,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             highTemperatureTextView
                     .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp_max()));
+            Log.d(TAG, "bindData: max" + forecast.getMain().getTemp_max());
+            Log.d(TAG, "bindData: max" + forecast.getMain().getTemp_min());
 
             lowTemperatureTextView
                     .setText(context.getString(R.string.format_temperature, forecast.getMain().getTemp_min()));

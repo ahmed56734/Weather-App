@@ -1,6 +1,9 @@
 package com.example.ahmed.weatherapp_index.ui.cities;
 
+import com.example.ahmed.weatherapp_index.BasePresenter;
+import com.example.ahmed.weatherapp_index.BaseView;
 import com.example.ahmed.weatherapp_index.data.models.UserCity;
+import com.google.android.gms.location.places.PlaceDetectionClient;
 
 import java.util.List;
 
@@ -10,35 +13,41 @@ import java.util.List;
 
 public interface CitiesContract {
 
-    interface CitiesResultCallback{
+    interface CitiesResultCallback {
 
         void onDataLoaded(List<UserCity> result);
 
         void onDataNotAvailable();
     }
 
-    interface GetCityResultCallback{
+    interface GetCityResultCallback {
         void onDataLoaded(UserCity result);
 
         void onDataNotAvailable();
     }
 
-    interface CurrentLocationCallback{
+    interface CurrentLocationCallback {
         void onLocationUpdated();
     }
 
-    interface AddCityCallback{
+    interface AddCityCallback {
         void onCityAdded();
+
         void onError();
     }
 
-    interface Presenter{
+    interface Presenter extends BasePresenter {
+        void getCurrentCityFromGps(PlaceDetectionClient placeDetectionClient, CitiesContract.AddCityCallback callback);
 
+        void getCities(CitiesContract.CitiesResultCallback callback);
+
+        void deleteCity(UserCity city);
+
+        void addCity(UserCity userCity, CitiesContract.AddCityCallback callback);
     }
 
 
-
-    interface View{
+    interface View extends BaseView {
 
     }
 }

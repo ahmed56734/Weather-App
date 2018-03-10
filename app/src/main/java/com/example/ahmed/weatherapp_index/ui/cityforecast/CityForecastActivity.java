@@ -29,26 +29,26 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
     private static final String TAG = "CityForecastActivity";
 
     @BindView(R.id.rv_city_forecast)
-    RecyclerView mForecastRecyclerView;
+    RecyclerView forecastRecyclerView;
 
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    Toolbar toolbar;
 
     @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+    ProgressBar progressBar;
 
     @BindView(R.id.error_message)
-    TextView mErrorMessageTextView;
+    TextView errorMessageTextView;
 
     @BindView(R.id.swiperefresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
-    private ProgressBar mActionBarProgressBar;
+    private ProgressBar actionBarProgressBar;
 
 
-    private ForecastAdapter mForecastAdapter;
-    private CityForecastPresenter mPresenter;
+    private ForecastAdapter forecastAdapter;
+    private CityForecastContract.Presenter presenter;
 
 
     @Override
@@ -57,34 +57,36 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
         setContentView(R.layout.activity_city_forecast);
         ButterKnife.bind(this);
 
-        setSupportActionBar(mToolbar);
+        setUpToolbar();
+
+        presenter = CityForecastPresenter.getInstance(Injection.provideModelLayer(getApplicationContext()), this);
+
+        forecastAdapter = new ForecastAdapter();
+        forecastRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        forecastRecyclerView.setAdapter(forecastAdapter);
+
+        showProgressBar();
+
+        //parse intent
+        Bundle bundle = getIntent().getExtras();
+        presenter.parseIntentBundle(bundle);
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshListener());
+
+
+    }
+
+    private void setUpToolbar() {
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowCustomEnabled(true);
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customBar = inflater.inflate(R.layout.forecast_custom_bar, null);
-        mActionBarProgressBar = customBar.findViewById(R.id.action_bar_progress_bar);
+        actionBarProgressBar = customBar.findViewById(R.id.action_bar_progress_bar);
         actionBar.setCustomView(customBar);
-
-        mPresenter = CityForecastPresenter.getInstance(Injection.provideModelLayer(getApplicationContext()), this);
-
-        mForecastAdapter = new ForecastAdapter();
-        mForecastRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mForecastRecyclerView.setAdapter(mForecastAdapter);
-
-        showProgressBar();
-
-        //parse intent
-        Bundle bundle = getIntent().getExtras();
-        mPresenter.parseIntentBundle(bundle);
-
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshListener());
-
-
-
-
     }
 
     @Override
@@ -95,7 +97,7 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
 
     private void updateUi() {
 
-        mPresenter.getForecast(new CityForecastContract.UpdateForecastCallback() {
+        presenter.getForecast(new CityForecastContract.UpdateForecastCallback() {
             @Override
             public void onForecastLoaded(String cityName, List<Forecast> forecastList) {
                 updateForecast(cityName, forecastList);
@@ -116,7 +118,7 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
         hideProgressBar();
         hideActionBarProgressBar();
         hideRefreshing();
-        mForecastAdapter.updateData(cityName, forecastList);
+        forecastAdapter.updateData(cityName, forecastList);
 
     }
 
@@ -125,42 +127,42 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        mPresenter.parseIntentBundle(intent.getExtras());
+        presenter.parseIntentBundle(intent.getExtras());
         updateUi();
     }
 
 
     private void hideRefreshing() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public void showActionBarProgressBar() {
-        mActionBarProgressBar.setVisibility(View.VISIBLE);
+        actionBarProgressBar.setVisibility(View.VISIBLE);
     }
 
     public void hideActionBarProgressBar() {
-        mActionBarProgressBar.setVisibility(View.INVISIBLE);
+        actionBarProgressBar.setVisibility(View.INVISIBLE);
     }
 
     public void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 
     public void hideProgressBar() {
-        mProgressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
 
     public void showErrorMessage() {
 
-        mErrorMessageTextView.setVisibility(View.VISIBLE);
+        errorMessageTextView.setVisibility(View.VISIBLE);
         hideProgressBar();
         hideActionBarProgressBar();
     }
 
     void hideErrorMessage() {
-        mErrorMessageTextView.setVisibility(View.GONE);
+        errorMessageTextView.setVisibility(View.GONE);
     }
 
 
@@ -170,7 +172,7 @@ public class CityForecastActivity extends AppCompatActivity implements CityForec
 
     }
 
-    class SwipeRefreshListener implements SwipeRefreshLayout.OnRefreshListener{
+    class SwipeRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
 
         @Override
         public void onRefresh() {
